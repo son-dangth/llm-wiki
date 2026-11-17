@@ -26,7 +26,7 @@ When the user asks a factual, conceptual, or knowledge-based question, **always 
 
 ### 4. After modifying wiki pages
 
-- Regenerate the index (read all pages, extract frontmatter, write to `.llm-wiki/index.md`)
+- Regenerate the index: `~/.claude/skills/llm-wiki/scripts/build-index.sh ./wiki`
 - Run `~/.claude/skills/llm-wiki/scripts/` checks if needed
 
 ## Key Paths

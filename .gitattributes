@@ -1,0 +1,5 @@
+# Keep LF everywhere, including Windows clones with core.autocrlf=true:
+# the bash scripts break on CRLF, and init-wiki.sh copies WIKI_SCHEMA.md into each wiki.
+* text=auto eol=lf
+*.png binary
+*.jpg binary

@@ -74,7 +74,7 @@ Add node + edges to `$WIKI_ROOT/.llm-wiki/graph.json`.
 
 ### Step 8: Regenerate Index
 
-Follow `workflows/ingest.md` Step 15 index regeneration procedure.
+Run `scripts/build-index.sh "$WIKI_ROOT"` (see `workflows/ingest.md` Step 15).
 
 ### Step 9: Confirm
 

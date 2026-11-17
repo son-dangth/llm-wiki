@@ -21,6 +21,9 @@ if [ ! -d "$WIKI_ROOT" ]; then
     exit 2
 fi
 
+# shellcheck disable=SC1091
+source "$(dirname "${BASH_SOURCE[0]}")/_utils.sh"
+
 # Collect all valid targets: page slugs + all aliases from frontmatter
 VALID_TARGETS=""
 
@@ -80,7 +83,7 @@ check_page() {
     local rel="${file#"$WIKI_ROOT"/}"
 
     local links
-    links=$(sed -n 's/.*\[\[\([^]|#]*\)\(|[^]]*\)*\]\].*/\1/p' "$file" 2>/dev/null | sort -u)
+    links=$(extract_links "$file" | sort -u)
 
     while IFS= read -r link; do
         [ -z "$link" ] && continue

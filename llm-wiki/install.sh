@@ -108,6 +108,7 @@ REQUIRED_FILES=(
     "WIKI_SCHEMA.md"
     "scripts/init-wiki.sh"
     "scripts/setup-project.sh"
+    "scripts/build-index.sh"
     "commands/wiki-ingest.md"
     "commands/wiki-query.md"
     "hooks/session-start.sh"

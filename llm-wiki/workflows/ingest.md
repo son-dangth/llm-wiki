@@ -270,19 +270,13 @@ For each contradiction found in Phase 1:
 
 ### Step 15: Regenerate Index
 
-**This is a programmatic operation — do not edit index.md by hand.**
+**This is a programmatic operation — do not edit index.md by hand.** Update `review.json` (Step 14) first, then run:
 
-1. Read all `*.md` files in `$WIKI_ROOT/` (excluding `.llm-wiki/` and `index.md`)
-2. Also read from `$WIKI_ROOT/topics/` if it exists
-3. Extract frontmatter from each page (between `---` delimiters)
-4. For each page, collect: slug, title, type, language, tags, summary, modified
-5. Build the index following the format in `WIKI_SCHEMA.md`:
-   - Header with timestamp and hash
-   - All Pages table
-   - By Tag sections
-   - Orphan Pages section (run `scripts/find-orphans.sh`)
-   - Review Queue section (from `review.json`)
-6. Write to `$WIKI_ROOT/.llm-wiki/index.md`
+```bash
+~/.claude/skills/llm-wiki/scripts/build-index.sh "$WIKI_ROOT"
+```
+
+The script reads the frontmatter of every `*.md` page in `$WIKI_ROOT/` (excluding `.llm-wiki/` and `index.md`) and writes `$WIKI_ROOT/.llm-wiki/index.md` in the format of `WIKI_SCHEMA.md`: a header with timestamp and hash, the All Pages table, By Tag sections, Orphan Pages (from `scripts/find-orphans.sh`) and the Review Queue (from `review.json`). It also stores the frontmatter hash in `.llm-wiki/cache/index-hash.txt`, so `scripts/check-stale.sh` then reports the index as fresh.
 
 ### Step 16: Write Sentinel + Update Manifest
 
@@ -298,10 +292,10 @@ For each contradiction found in Phase 1:
    - Add entry: `{"$HASH": {"name": "source name", "date": "ISO timestamp", "language": "en|zh|bilingual", "pages_created": [...], "pages_updated": [...]}}`
    - Write back
 
-3. Store index hash for staleness detection:
+3. Confirm the index is fresh (`build-index.sh` in Step 15 stored the hash):
 
    ```bash
-   scripts/check-stale.sh "$WIKI_ROOT"  # computes and stores hash
+   scripts/check-stale.sh "$WIKI_ROOT"  # exit 0 = fresh
    ```
 
 ### Step 17: Report Summary

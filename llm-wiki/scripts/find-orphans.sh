@@ -20,11 +20,15 @@ if [ ! -d "$WIKI_ROOT" ]; then
     exit 1
 fi
 
-# Collect all page slugs (filenames without .md) in wiki root and topics/
-SLUGS=$(find "$WIKI_ROOT" -maxdepth 1 -name "*.md" ! -path "*/.llm-wiki/*" ! -name "index.md" -exec basename {} .md \; 2>/dev/null)
+# shellcheck disable=SC1091
+source "$(dirname "${BASH_SOURCE[0]}")/_utils.sh"
 
-# Collect all wikilink targets across all wiki pages
-ALL_LINKS=$(find "$WIKI_ROOT" -maxdepth 1 -name "*.md" ! -path "*/.llm-wiki/*" -exec sed -n 's/.*\[\[\([^]|#]*\)\(|[^]]*\)*\]\].*/\1/p' {} \; 2>/dev/null | sort -u)
+# Collect all page slugs (filenames without .md) in the wiki root
+SLUGS=$(list_pages "$WIKI_ROOT" | xargs -0 -r -n1 basename -s .md)
+
+# Collect all wikilink targets across all pages. index.md is skipped: it links
+# to every page, so counting it would hide every orphan.
+ALL_LINKS=$(list_pages "$WIKI_ROOT" | while IFS= read -r -d '' f; do extract_links "$f"; done | sort -u)
 
 # For each slug, check if it appears as a link target
 ORPHANS_FOUND=0

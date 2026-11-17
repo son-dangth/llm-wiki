@@ -28,7 +28,7 @@ You should **proactively** use the wiki without waiting for explicit `/wiki*` co
 
 3. **When the wiki lacks knowledge**: Tell the user clearly: "The wiki doesn't cover this yet." Suggest dropping source documents into `.raw/` for ingestion.
 
-4. **After modifying wiki pages**: Always regenerate the index by reading all pages, extracting frontmatter, and writing the updated `.llm-wiki/index.md`.
+4. **After modifying wiki pages**: Always regenerate the index with `scripts/build-index.sh <wiki_root>`, which reads every page's frontmatter and writes `.llm-wiki/index.md`.
 
 5. **Knowledge gap detection**: Actively identify what the wiki is missing and suggest sources to fill gaps.
 
@@ -76,6 +76,7 @@ When you are invoked (via `Skill("llm-wiki")`), determine which workflow to foll
 |------|---------|
 | `WIKI_SCHEMA.md` | Page type definitions, field specs, naming conventions |
 | `scripts/init-wiki.sh` | Bootstrap a new wiki directory |
+| `scripts/build-index.sh` | Regenerate `.llm-wiki/index.md` and the stored index hash |
 | `./wiki/.llm-wiki/` | Wiki metadata (index, cache, review queue) |
 | `./wiki/.llm-wiki/schema.md` | Per-project copy of schema |
 | `./wiki/.llm-wiki/config.md` | User configuration overrides |

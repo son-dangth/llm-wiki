@@ -136,20 +136,31 @@ if [ ! -f "$WIKI_ROOT/.llm-wiki/graph.json" ] || [ "$FORCE" = true ]; then
 fi
 
 # Create symlink: wiki/index.md → .llm-wiki/index.md
+# Where symlinks are unavailable (Git Bash / MSYS on Windows without developer mode),
+# `ln -s` silently writes a copy, which goes stale at the next index rebuild.
+# Keep only a real symlink; otherwise leave no wiki/index.md at all.
+link_index() {
+    ln -s ".llm-wiki/index.md" "$WIKI_ROOT/index.md" 2>/dev/null || true
+    if [ -L "$WIKI_ROOT/index.md" ]; then
+        echo "  ✓ index.md → .llm-wiki/index.md (symlink)"
+    else
+        rm -f "$WIKI_ROOT/index.md"
+        echo "  ⚠ symlinks unavailable: no wiki/index.md created; the index is $WIKI_ROOT/.llm-wiki/index.md"
+    fi
+}
+
 if [ -L "$WIKI_ROOT/index.md" ]; then
     rm "$WIKI_ROOT/index.md"
-    ln -s ".llm-wiki/index.md" "$WIKI_ROOT/index.md"
+    link_index
 elif [ -f "$WIKI_ROOT/index.md" ]; then
     if [ "$FORCE" = true ]; then
         rm "$WIKI_ROOT/index.md"
-        ln -s ".llm-wiki/index.md" "$WIKI_ROOT/index.md"
-        echo "  ✓ index.md (symlink, replaced existing file)"
+        link_index
     else
         echo "  ⚠ index.md already exists as a regular file (use --force to replace with symlink)"
     fi
 else
-    ln -s ".llm-wiki/index.md" "$WIKI_ROOT/index.md"
-    echo "  ✓ index.md → .llm-wiki/index.md (symlink)"
+    link_index
 fi
 
 # Make scripts executable

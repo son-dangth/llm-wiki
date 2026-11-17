@@ -222,6 +222,7 @@ llm-wiki/
 ├── scripts/                         Deterministic bash operations
 │   ├── setup-project.sh             ★ One-stop project setup
 │   ├── init-wiki.sh                 Bootstrap new wiki directory
+│   ├── build-index.sh               Regenerate the index from frontmatter
 │   ├── hash-files.sh                SHA-256 hash source files
 │   ├── check-stale.sh               Index freshness check
 │   ├── find-orphans.sh              Pages with zero incoming links
